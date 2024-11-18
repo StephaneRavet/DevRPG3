@@ -2,3 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#quests-list li {
+  @apply p-2 bg-gray-700 rounded hover:bg-gray-600;
+}

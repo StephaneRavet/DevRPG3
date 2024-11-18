@@ -29,7 +29,7 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: /\.(?:js)$/,
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'js-cache',
               cacheableResponse: {
@@ -39,20 +39,29 @@ export default defineConfig({
           },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
-            handler: 'CacheFirst',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'images-cache',
             }
           },
           {
             urlPattern: /\.(?:js|css)$/,
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'static-resources'
             }
           }
-        ]
+        ],
+        navigateFallback: './offline.html',
+        navigateFallbackDenylist: [/^\/api\//],
       },
+      injectRegister: 'auto',
+      strategies: 'injectManifest',
+      srcDir: 'dev-dist',
+      filename: 'sw.js',
+      // Ajoutez ces lignes pour le fallback
+      navigateFallback: './offline.html',
+      navigateFallbackDenylist: [/^\/api\//],
     })
   ]
 });
