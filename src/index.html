@@ -10,35 +10,37 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 
-<body class="bg-gray-900 text-white">
-  <header class="bg-gray-800 p-4 text-center">
-    <h1 class="text-3xl font-bold">DevRPG</h1>
+<body class="bg-gray-900 text-white min-h-screen">
+  <header class="bg-gray-800 p-3 shadow-lg">
+    <h1 class="text-4xl font-bold text-blue-400 text-center">DevRPG</h1>
     <nav class="mt-2">
-      <ul class="flex justify-center space-x-4">
-        <li><a href="#dashboard" class="text-blue-400 hover:text-blue-300">Tableau de bord</a></li>
-        <li><a href="#quests" class="text-blue-400 hover:text-blue-300">Quêtes</a></li>
-        <li><a href="#profile" class="text-blue-400 hover:text-blue-300">Profil</a></li>
+      <ul class="flex justify-center space-x-6">
+        <li><a href="#dashboard" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">Tableau de
+            bord</a></li>
+        <li><a href="#quests" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">Quêtes</a></li>
+        <li><a href="#profile" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">Profil</a></li>
       </ul>
     </nav>
   </header>
 
-  <main class="p-4">
+  <main class="container mx-auto p-6 max-w-4xl">
     <section id="dashboard" class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">Tableau de bord</h2>
-      <div class="bg-gray-800 p-4 rounded-lg">
+      <h2 class="text-xl font-semibold mb-1 text-blue-300">Tableau de bord</h2>
+      <div class="bg-gray-800 p-6 rounded-lg shadow-xl hover:bg-gray-750 transition-colors">
         <p>
           Personnage :
-          <input type="text" id="username" class="text-blue-500 px-1 rounded b-red-500"
+          <input type="text" id="username"
+            class="bg-gray-700 text-blue-400 px-3 py-1 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
             placeholder="Développeur anonyme">
         </p>
-        <p>Niveau : <span class="text-blue-400 font-bold" id="character-level">1</span></p>
-        <p>Points d'expérience : <span class="text-blue-400 font-bold" id="character-xp">0</span></p>
+        <p>Niveau : <span class="text-blue-400 font-bold text-lg" id="character-level">1</span></p>
+        <p>Points d'expérience : <span class="text-blue-400 font-bold text-lg" id="character-xp">0</span></p>
       </div>
     </section>
 
     <section id="quests" class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">Quêtes disponibles</h2>
-      <ul class="bg-gray-800 p-4 rounded-lg space-y-2" id="quests-list">
+      <h2 class="text-xl font-semibold mb-1 text-blue-300">Quêtes disponibles</h2>
+      <ul class="bg-gray-800 p-6 rounded-lg shadow-xl space-y-3" id="quests-list">
       </ul>
     </section>
   </main>

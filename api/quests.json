@@ -1,117 +1,25 @@
 [
-  {
-    "name": "Résoudre un bug CSS",
-    "description": "Améliorer la qualité du code CSS",
-    "xp": 10
-  },
-  {
-    "name": "Apprendre un nouveau framework",
-    "description": "Apprendre un nouveau framework",
-    "xp": 100
-  },
-  {
-    "name": "Améliorer une fonctionnalité existante",
-    "description": "Améliorer une fonctionnalité existante",
-    "xp": 30
-  },
-  {
-    "name": "Écrire des tests unitaires",
-    "description": "Ajouter des tests unitaires pour garantir la qualité",
-    "xp": 50
-  },
-  {
-    "name": "Refactoriser un composant",
-    "description": "Améliorer le code d’un composant pour le rendre plus lisible",
-    "xp": 25
-  },
-  {
-    "name": "Optimiser les requêtes API",
-    "description": "Réduire le nombre de requêtes pour améliorer les performances",
-    "xp": 60
-  },
-  {
-    "name": "Créer une animation JavaScript",
-    "description": "Ajouter une animation sympa pour améliorer l’interface utilisateur",
-    "xp": 40
-  },
-  {
-    "name": "Corriger une erreur d’accessibilité",
-    "description": "Rendre l’application plus accessible aux personnes en situation de handicap",
-    "xp": 35
-  },
-  {
-    "name": "Réaliser une revue de code",
-    "description": "Examiner le code d’un autre développeur pour trouver des améliorations",
-    "xp": 20
-  },
-  {
-    "name": "Documenter une fonctionnalité",
-    "description": "Écrire la documentation pour une fonctionnalité existante",
-    "xp": 30
-  },
-  {
-    "name": "Améliorer la vitesse de chargement",
-    "description": "Optimiser le temps de chargement des pages",
-    "xp": 75
-  },
-  {
-    "name": "Ajouter une fonctionnalité de recherche",
-    "description": "Créer une barre de recherche fonctionnelle dans l’application",
-    "xp": 80
-  },
-  {
-    "name": "Déployer sur un serveur distant",
-    "description": "Déployer la dernière version de l’application sur un serveur",
-    "xp": 100
-  },
-  {
-    "name": "Créer un design responsive",
-    "description": "Adapter l’interface aux mobiles et tablettes",
-    "xp": 70
-  },
-  {
-    "name": "Ajouter un système de notifications",
-    "description": "Permettre à l’utilisateur de recevoir des notifications",
-    "xp": 50
-  },
-  {
-    "name": "Mettre en place un cache de données",
-    "description": "Implémenter le cache pour optimiser les performances",
-    "xp": 60
-  },
-  {
-    "name": "Optimiser une fonction JavaScript",
-    "description": "Réduire la complexité d’une fonction pour la rendre plus rapide",
-    "xp": 45
-  },
-  {
-    "name": "Intégrer une API tierce",
-    "description": "Utiliser une API externe pour enrichir l’application",
-    "xp": 90
-  },
-  {
-    "name": "Créer une page 404 personnalisée",
-    "description": "Ajouter une page 404 créative pour les erreurs de navigation",
-    "xp": 20
-  },
-  {
-    "name": "Ajouter un thème sombre",
-    "description": "Proposer une option de thème sombre pour les utilisateurs",
-    "xp": 65
-  },
-  {
-    "name": "Gérer les erreurs utilisateur",
-    "description": "Ajouter une gestion des erreurs plus conviviale",
-    "xp": 30
-  },
-  {
-    "name": "Améliorer la sécurité des formulaires",
-    "description": "Valider les formulaires pour éviter les failles XSS/CSRF",
-    "xp": 80
-  },
-  {
-    "name": "Ajouter une fonctionnalité de téléchargement",
-    "description": "Permettre le téléchargement de fichiers depuis l’application",
-    "xp": 50
-  }
+  { "name": "Résoudre un bug CSS", "xp": 10 },
+  { "name": "Apprendre un nouveau framework", "xp": 100 },
+  { "name": "Améliorer une fonctionnalité existante", "xp": 30 },
+  { "name": "Écrire des tests unitaires", "xp": 50 },
+  { "name": "Refactoriser un composant", "xp": 25 },
+  { "name": "Optimiser les requêtes API", "xp": 60 },
+  { "name": "Créer une animation JavaScript", "xp": 40 },
+  { "name": "Corriger une erreur d'accessibilité", "xp": 35 },
+  { "name": "Réaliser une revue de code", "xp": 20 },
+  { "name": "Documenter une fonctionnalité", "xp": 30 },
+  { "name": "Améliorer la vitesse de chargement", "xp": 75 },
+  { "name": "Ajouter une fonctionnalité de recherche", "xp": 80 },
+  { "name": "Déployer sur un serveur distant", "xp": 100 },
+  { "name": "Créer un design responsive", "xp": 70 },
+  { "name": "Ajouter un système de notifications", "xp": 50 },
+  { "name": "Mettre en place un cache de données", "xp": 60 },
+  { "name": "Optimiser une fonction JavaScript", "xp": 45 },
+  { "name": "Intégrer une API tierce", "xp": 90 },
+  { "name": "Créer une page 404 personnalisée", "xp": 20 },
+  { "name": "Ajouter un thème sombre", "xp": 65 },
+  { "name": "Gérer les erreurs utilisateur", "xp": 30 },
+  { "name": "Améliorer la sécurité des formulaires", "xp": 80 },
+  { "name": "Ajouter une fonctionnalité de téléchargement", "xp": 50 }
 ]
