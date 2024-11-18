@@ -1,0 +1,52 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevRPG</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body class="bg-gray-900 text-white">
+  <header class="bg-gray-800 p-4 text-center">
+    <h1 class="text-3xl font-bold">DevRPG</h1>
+    <nav class="mt-2">
+      <ul class="flex justify-center space-x-4">
+        <li><a href="#dashboard" class="text-blue-400 hover:text-blue-300">Tableau de bord</a></li>
+        <li><a href="#quests" class="text-blue-400 hover:text-blue-300">Quêtes</a></li>
+        <li><a href="#profile" class="text-blue-400 hover:text-blue-300">Profil</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="p-4">
+    <section id="dashboard" class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2">Tableau de bord</h2>
+      <div class="bg-gray-800 p-4 rounded-lg">
+        <p>Niveau : <span class="text-blue-400 font-bold">1</span></p>
+        <p>Points d'expérience : <span class="text-blue-400 font-bold">0</span></p>
+      </div>
+    </section>
+
+    <section id="quests" class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2">Quêtes disponibles</h2>
+      <ul class="bg-gray-800 p-4 rounded-lg space-y-2">
+        <li class="p-2 bg-gray-700 rounded hover:bg-gray-600">Résoudre un bug CSS</li>
+        <li class="p-2 bg-gray-700 rounded hover:bg-gray-600">Apprendre un nouveau framework</li>
+        <li class="p-2 bg-gray-700 rounded hover:bg-gray-600">Améliorer une fonctionnalité existante</li>
+      </ul>
+    </section>
+
+    <section id="profile">
+      <h2 class="text-2xl font-semibold mb-2">Profil de votre personnage</h2>
+      <div class="bg-gray-800 p-4 rounded-lg">
+        <p>Personnage : <span class="text-blue-400 font-bold">Développeur anonyme</span></p>
+      </div>
+    </section>
+  </main>
+  <script src="./main.js"></script>
+</body>
+
+</html>
