@@ -136,9 +136,9 @@ async function feedQuests() {
 // Server initialization
 initDB().then(() => {
   app.listen(PORT, () => {
-    console.log(`Serveur API démarré sur le port ${PORT}`);
+    console.log(`API Server started on port ${PORT}`);
   });
 }).catch(error => {
-  console.error('Erreur de démarrage du serveur:', error);
+  console.error('Server startup error:', error);
   process.exit(1);
 });

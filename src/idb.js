@@ -6,11 +6,11 @@ const DB_VERSION = 1;
 async function initDB() {
   return openDB(DB_NAME, DB_VERSION, {
     upgrade(db) {
-      // Store pour les utilisateurs
+      // Store for users
       if (!db.objectStoreNames.contains('users')) {
         db.createObjectStore('users', { keyPath: 'username' });
       }
-      // Store pour les quêtes
+      // Store for quests
       if (!db.objectStoreNames.contains('quests')) {
         db.createObjectStore('quests', { keyPath: 'id', autoIncrement: true });
       }

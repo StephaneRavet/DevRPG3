@@ -20,7 +20,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true // Active le service worker en développement
+        enabled: true // Enable service worker in development
       },
       workbox: {
         clientsClaim: true,
@@ -59,7 +59,7 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'dev-dist',
       filename: 'sw.js',
-      // Ajoutez ces lignes pour le fallback
+      // Add these lines for fallback
       navigateFallback: './offline.html',
       navigateFallbackDenylist: [/^\/api\//],
     })

@@ -9,7 +9,7 @@ async function getQuests() {
     await idbSaveQuests(quests);
     return quests;
   } catch (error) {
-    console.log('Erreur API, utilisation du cache:', error);
+    console.log('API Error, using cache:', error);
     return await idbGetQuests();
   }
 }
@@ -20,7 +20,7 @@ async function getUser(username) {
     await idbSaveUser(user);
     return user;
   } catch (error) {
-    console.log('Erreur API, utilisation du cache:', error);
+    console.log('API Error, using cache:', error);
     return await idbGetUser(username);
   }
 }
@@ -39,7 +39,7 @@ function displayQuests() {
       questsList.append(questElement);
     });
 
-    // Gestionnaire d'événements pour les quêtes
+    // Event handler for quests
     $('.quest-item').on('click', function () {
       const questId = $(this).data('quest-id');
       completeQuest(questId);
@@ -59,7 +59,7 @@ async function completeQuest(questId) {
   const username = $('#username').val();
 
   if (!username) {
-    alert('Veuillez entrer un nom de personnage');
+    alert('Please enter a character name');
     $('#username').focus();
     return;
   }
@@ -70,8 +70,8 @@ async function completeQuest(questId) {
     displayUser(user);
     displayQuests();
   } catch (error) {
-    console.error('Erreur lors de la complétion de la quête:', error);
-    // En cas d'erreur, mettre à jour localement
+    console.error('Error completing quest:', error);
+    // In case of error, update locally
     const user = await idbGetUser(username);
     const quests = await idbGetQuests();
     const quest = quests.find(q => q.id === questId);
@@ -87,7 +87,7 @@ async function completeQuest(questId) {
       await idbSaveUser(updatedUser);
       displayUser(updatedUser);
 
-      // Retirer la quête de la liste locale
+      // Remove quest from local list
       const updatedQuests = quests.filter(q => q.id !== questId);
       await idbSaveQuests(updatedQuests);
       displayQuests();
@@ -95,18 +95,18 @@ async function completeQuest(questId) {
   }
 }
 
-// Ajouter au début du fichier
+// Add at the beginning of the file
 function updateConnectionStatus() {
   const online = navigator.onLine;
   $('.online').toggleClass('hidden', !online);
   $('.offline').toggleClass('hidden', online);
 }
 
-// Écouteurs d'événements pour la connectivité
+// Event listeners for connectivity
 window.addEventListener('online', updateConnectionStatus);
 window.addEventListener('offline', updateConnectionStatus);
 
-// Initialisation
+// Initialization
 $(() => {
   displayQuests();
   $('#username').focus();
