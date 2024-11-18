@@ -1,31 +1,30 @@
 // src/main.js
 
-// Configuration de l'API
-const API_BASE_URL = 'http://localhost:3000/api';
+import { apiCompleteQuest, apiGetQuests, apiGetUser } from './api.js';
+import { idbGetQuests, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js';
 
-// Fonctions de récupération des données
 async function getQuests() {
   try {
-    const response = await fetch(`${API_BASE_URL}/quests`);
-    return await response.json();
+    const quests = await apiGetQuests();
+    await idbSaveQuests(quests);
+    return quests;
   } catch (error) {
-    console.error('Erreur lors de la récupération des quêtes:', error);
-    return [];
+    console.log('Erreur API, utilisation du cache:', error);
+    return await idbGetQuests();
   }
 }
 
 async function getUser(username) {
   try {
-    const response = await fetch(`${API_BASE_URL}/users/${username}`);
-    const user = await response.json();
+    const user = await apiGetUser(username);
+    await idbSaveUser(user);
     return user;
   } catch (error) {
-    console.error('Erreur lors de la récupération de l\'utilisateur:', error);
-    return null;
+    console.log('Erreur API, utilisation du cache:', error);
+    return await idbGetUser(username);
   }
 }
 
-// Fonctions d'affichage
 function displayQuests() {
   getQuests().then((quests) => {
     const questsList = $('#quests-list');
@@ -56,7 +55,6 @@ function displayUser(user) {
   return user;
 }
 
-// Fonction de complétion de quête
 async function completeQuest(questId) {
   const username = $('#username').val();
 
@@ -67,20 +65,53 @@ async function completeQuest(questId) {
   }
 
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/users/${username}/quests/${questId}`,
-      { method: 'POST' }
-    );
-    const user = await response.json();
+    const user = await apiCompleteQuest(username, questId);
+    await idbSaveUser(user);
     displayUser(user);
     displayQuests();
   } catch (error) {
     console.error('Erreur lors de la complétion de la quête:', error);
+    // En cas d'erreur, mettre à jour localement
+    const user = await idbGetUser(username);
+    const quests = await idbGetQuests();
+    const quest = quests.find(q => q.id === questId);
+
+    if (quest) {
+      const newXp = user.xp + quest.xp;
+      const newLevel = Math.floor(Math.pow(newXp, 0.4) / 2) + 1;
+      const updatedUser = {
+        ...user,
+        xp: newXp,
+        level: newLevel
+      };
+      await idbSaveUser(updatedUser);
+      displayUser(updatedUser);
+
+      // Retirer la quête de la liste locale
+      const updatedQuests = quests.filter(q => q.id !== questId);
+      await idbSaveQuests(updatedQuests);
+      displayQuests();
+    }
   }
 }
+
+// Ajouter au début du fichier
+function updateConnectionStatus() {
+  const online = navigator.onLine;
+  $('.online').toggleClass('hidden', !online);
+  $('.offline').toggleClass('hidden', online);
+}
+
+// Écouteurs d'événements pour la connectivité
+window.addEventListener('online', updateConnectionStatus);
+window.addEventListener('offline', updateConnectionStatus);
 
 // Initialisation
 $(() => {
   displayQuests();
   $('#username').focus();
+  updateConnectionStatus();
+  if ($('#username').val()) {
+    getUser($('#username').val()).then(displayUser);
+  }
 });

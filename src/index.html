@@ -12,7 +12,13 @@
 
 <body class="bg-gray-900 text-white min-h-screen">
   <header class="bg-gray-800 p-3 shadow-lg">
-    <h1 class="text-4xl font-bold text-blue-400 text-center">DevRPG</h1>
+    <div class="flex justify-between items-center">
+      <h1 class="text-4xl font-bold text-blue-400">DevRPG</h1>
+      <div id="connection-status" class="text-sm">
+        <span class="online hidden text-green-400">🟢 En ligne</span>
+        <span class="offline hidden text-red-400">🔴 Hors ligne</span>
+      </div>
+    </div>
     <nav class="mt-2">
       <ul class="flex justify-center space-x-6">
         <li><a href="#dashboard" class="text-blue-400 hover:text-blue-300 transition-colors font-medium">Tableau de
