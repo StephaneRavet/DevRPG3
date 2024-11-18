@@ -4,5 +4,5 @@
 @tailwind utilities;
 
 #quests-list li {
-  @apply p-2 bg-gray-700 rounded hover:bg-gray-600;
+  @apply p-2 bg-gray-700 rounded hover:bg-gray-600 cursor-pointer select-none;
 }

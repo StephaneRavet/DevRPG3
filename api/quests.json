@@ -2,116 +2,116 @@
   {
     "name": "Résoudre un bug CSS",
     "description": "Améliorer la qualité du code CSS",
-    "points": 10
+    "xp": 10
   },
   {
     "name": "Apprendre un nouveau framework",
     "description": "Apprendre un nouveau framework",
-    "points": 100
+    "xp": 100
   },
   {
     "name": "Améliorer une fonctionnalité existante",
     "description": "Améliorer une fonctionnalité existante",
-    "points": 30
+    "xp": 30
   },
   {
     "name": "Écrire des tests unitaires",
     "description": "Ajouter des tests unitaires pour garantir la qualité",
-    "points": 50
+    "xp": 50
   },
   {
     "name": "Refactoriser un composant",
     "description": "Améliorer le code d’un composant pour le rendre plus lisible",
-    "points": 25
+    "xp": 25
   },
   {
     "name": "Optimiser les requêtes API",
     "description": "Réduire le nombre de requêtes pour améliorer les performances",
-    "points": 60
+    "xp": 60
   },
   {
     "name": "Créer une animation JavaScript",
     "description": "Ajouter une animation sympa pour améliorer l’interface utilisateur",
-    "points": 40
+    "xp": 40
   },
   {
     "name": "Corriger une erreur d’accessibilité",
     "description": "Rendre l’application plus accessible aux personnes en situation de handicap",
-    "points": 35
+    "xp": 35
   },
   {
     "name": "Réaliser une revue de code",
     "description": "Examiner le code d’un autre développeur pour trouver des améliorations",
-    "points": 20
+    "xp": 20
   },
   {
     "name": "Documenter une fonctionnalité",
     "description": "Écrire la documentation pour une fonctionnalité existante",
-    "points": 30
+    "xp": 30
   },
   {
     "name": "Améliorer la vitesse de chargement",
     "description": "Optimiser le temps de chargement des pages",
-    "points": 75
+    "xp": 75
   },
   {
     "name": "Ajouter une fonctionnalité de recherche",
     "description": "Créer une barre de recherche fonctionnelle dans l’application",
-    "points": 80
+    "xp": 80
   },
   {
     "name": "Déployer sur un serveur distant",
     "description": "Déployer la dernière version de l’application sur un serveur",
-    "points": 100
+    "xp": 100
   },
   {
     "name": "Créer un design responsive",
     "description": "Adapter l’interface aux mobiles et tablettes",
-    "points": 70
+    "xp": 70
   },
   {
     "name": "Ajouter un système de notifications",
     "description": "Permettre à l’utilisateur de recevoir des notifications",
-    "points": 50
+    "xp": 50
   },
   {
     "name": "Mettre en place un cache de données",
     "description": "Implémenter le cache pour optimiser les performances",
-    "points": 60
+    "xp": 60
   },
   {
     "name": "Optimiser une fonction JavaScript",
     "description": "Réduire la complexité d’une fonction pour la rendre plus rapide",
-    "points": 45
+    "xp": 45
   },
   {
     "name": "Intégrer une API tierce",
     "description": "Utiliser une API externe pour enrichir l’application",
-    "points": 90
+    "xp": 90
   },
   {
     "name": "Créer une page 404 personnalisée",
     "description": "Ajouter une page 404 créative pour les erreurs de navigation",
-    "points": 20
+    "xp": 20
   },
   {
     "name": "Ajouter un thème sombre",
     "description": "Proposer une option de thème sombre pour les utilisateurs",
-    "points": 65
+    "xp": 65
   },
   {
     "name": "Gérer les erreurs utilisateur",
     "description": "Ajouter une gestion des erreurs plus conviviale",
-    "points": 30
+    "xp": 30
   },
   {
     "name": "Améliorer la sécurité des formulaires",
     "description": "Valider les formulaires pour éviter les failles XSS/CSRF",
-    "points": 80
+    "xp": 80
   },
   {
     "name": "Ajouter une fonctionnalité de téléchargement",
     "description": "Permettre le téléchargement de fichiers depuis l’application",
-    "points": 50
+    "xp": 50
   }
 ]
