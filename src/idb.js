@@ -1,6 +1,9 @@
 // idb.js
 import { openDB } from 'idb';
 
+// Import des quêtes depuis le fichier JSON
+import QUESTS from '../api/quests.json';
+
 const DB_NAME = 'devrpg-db';
 const DB_VERSION = 1;
 
@@ -17,6 +20,16 @@ async function initDB() {
       }
     },
   });
+}
+
+// Fonction helper pour générer une quête aléatoire
+function generateRandomQuest() {
+  const randomQuest = QUESTS[Math.floor(Math.random() * QUESTS.length)];
+  return {
+    name: randomQuest.name,
+    description: randomQuest.description,
+    xp: randomQuest.xp
+  };
 }
 
 export async function idbSaveUser(userData) {
@@ -40,4 +53,30 @@ export async function idbSaveQuests(quests) {
 export async function idbGetQuests() {
   const db = await initDB();
   return await db.getAll('quests');
+}
+
+export async function idbCompleteQuest(username, questId) {
+  const user = await idbGetUser(username);
+  const quests = await idbGetQuests();
+  const quest = quests.find(q => q.id === questId);
+
+  if (!quest) return null;
+
+  const newXp = user.xp + quest.xp;
+  const newLevel = Math.floor(Math.pow(newXp, 0.4) / 2) + 1;
+  const updatedUser = {
+    ...user,
+    xp: newXp,
+    level: newLevel
+  };
+
+  // Supprimer la quête complétée et ajouter une nouvelle quête
+  const remainingQuests = quests.filter(q => q.id !== questId);
+  const newQuest = generateRandomQuest();
+  const updatedQuests = [...remainingQuests, newQuest];
+
+  await idbSaveQuests(updatedQuests);
+  await idbSaveUser(updatedUser);
+
+  return updatedUser;
 }

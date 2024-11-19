@@ -1,7 +1,19 @@
 // src/main.js
+import { createInstallButton } from './InstallButton'
+import { initPWA } from './pwaCustomInstall'
 
-import { apiCompleteQuest, apiGetQuests, apiGetUser } from './api.js';
-import { idbGetQuests, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js';
+// Initialize PWA features
+initPWA()
+
+// Add install button to the page
+const installButton = createInstallButton()
+if (installButton) {
+  document.body.appendChild(installButton)
+}
+
+import { apiCompleteQuest, apiGetQuests, apiGetUser } from './api.js'
+import { idbCompleteQuest, idbGetQuests, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js'
+import { addToSyncQueue, processSyncQueue } from './syncQueue'
 
 async function getQuests() {
   try {
@@ -9,7 +21,7 @@ async function getQuests() {
     await idbSaveQuests(quests);
     return quests;
   } catch (error) {
-    console.log('API Error, using cache:', error);
+    // console.log('API Error, using cache:', error);
     return await idbGetQuests();
   }
 }
@@ -20,7 +32,7 @@ async function getUser(username) {
     await idbSaveUser(user);
     return user;
   } catch (error) {
-    console.log('API Error, using cache:', error);
+    // console.log('API Error, using cache:', error);
     return await idbGetUser(username);
   }
 }
@@ -65,41 +77,48 @@ async function completeQuest(questId) {
   }
 
   try {
-    const user = await apiCompleteQuest(username, questId);
-    await idbSaveUser(user);
-    displayUser(user);
-    displayQuests();
-  } catch (error) {
-    console.error('Error completing quest:', error);
-    // In case of error, update locally
-    const user = await idbGetUser(username);
-    const quests = await idbGetQuests();
-    const quest = quests.find(q => q.id === questId);
-
-    if (quest) {
-      const newXp = user.xp + quest.xp;
-      const newLevel = Math.floor(Math.pow(newXp, 0.4) / 2) + 1;
-      const updatedUser = {
-        ...user,
-        xp: newXp,
-        level: newLevel
-      };
+    if (!navigator.onLine) {
+      // If offline, add to sync queue and update locally
+      await addToSyncQueue({ type: 'completeQuest', username, questId });
+      const updatedUser = await idbCompleteQuest(username, questId);
       await idbSaveUser(updatedUser);
       displayUser(updatedUser);
-
-      // Remove quest from local list
-      const updatedQuests = quests.filter(q => q.id !== questId);
-      await idbSaveQuests(updatedQuests);
+      displayQuests();
+    } else {
+      // If online, process normally
+      const user = await apiCompleteQuest(username, questId);
+      await idbSaveUser(user);
+      displayUser(user);
       displayQuests();
     }
+  } catch (error) {
+    // In case of error, update locally and queue for sync
+    await addToSyncQueue({
+      type: 'completeQuest',
+      username,
+      questId
+    });
+    const updatedUser = await idbCompleteQuest(username, questId);
+    await idbSaveUser(updatedUser);
+    displayUser(updatedUser);
+    displayQuests();
   }
 }
 
 // Add at the beginning of the file
-function updateConnectionStatus() {
+async function updateConnectionStatus() {
   const online = navigator.onLine;
   $('.online').toggleClass('hidden', !online);
   $('.offline').toggleClass('hidden', online);
+
+  // When coming back online, process the sync queue
+  if (online) {
+    try {
+      await processSyncQueue();
+    } catch (error) {
+      console.error('Error processing sync queue:', error);
+    }
+  }
 }
 
 // Event listeners for connectivity
@@ -108,10 +127,19 @@ window.addEventListener('offline', updateConnectionStatus);
 
 // Initialization
 $(() => {
-  displayQuests();
-  $('#username').focus();
-  updateConnectionStatus();
-  if ($('#username').val()) {
-    getUser($('#username').val()).then(displayUser);
+  if (localStorage.getItem('username')) {
+    $('#username').val(localStorage.getItem('username'));
   }
+  displayQuests();
+  updateConnectionStatus();
+  const username = $('#username').val();
+  if (username) {
+    getUser(username).then(displayUser);
+  } else {
+    $('#username').focus();
+  }
+  $('#username').on('keyup', function () {
+    const username = $('#username').val();
+    localStorage.setItem('username', username);
+  });
 });

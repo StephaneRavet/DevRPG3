@@ -6,3 +6,55 @@
 #quests-list li {
   @apply p-2 bg-gray-700 rounded hover:bg-gray-600 cursor-pointer select-none;
 }
+
+.pwa-install-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: transform 0.2s;
+}
+
+.pwa-install-button:hover {
+  transform: translateY(-2px);
+  background-color: #4338ca;
+}
+
+.update-prompt {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #1e293b;
+  color: white;
+  padding: 16px;
+  text-align: center;
+  z-index: 1001;
+}
+
+.update-prompt-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.update-button {
+  padding: 8px 16px;
+  background: #4f46e5;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.update-button:hover {
+  background: #4338ca;
+}
