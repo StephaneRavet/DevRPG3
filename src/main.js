@@ -1,6 +1,6 @@
 // src/main.js
 import { apiCompleteQuest, apiGetQuests, apiGetUser } from './api.js'
-import { idbCompleteQuest, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js'
+import { idbCompleteQuest, idbGetQuests, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js'
 import { createInstallButton } from './InstallButton'
 import { requestNotificationPermission, sendLevelUpNotification } from './notifications.js'
 import { initPWA } from './pwaCustomInstall'
@@ -75,24 +75,23 @@ async function completeQuest(questId) {
     return;
   }
 
-  const oldLevel = await idbGetUser(username).level; // Sauvegarder le niveau actuel
+  const oldLevel = (await idbGetUser(username)).level; // Sauvegarder le niveau actuel
   let updatedUser;
 
-  if (!navigator.onLine) {
-    // If offline, add to sync queue and update locally
+  try {
+    updatedUser = await apiCompleteQuest(username, questId);
+    await idbSaveUser(updatedUser);
+  } catch (error) {
+    // In case of error, update locally and queue for sync
     await addToSyncQueue({ type: 'completeQuest', username, questId });
     updatedUser = await idbCompleteQuest(username, questId);
-    await idbSaveUser(updatedUser);
-  } else {
-    // If online, process normally
-    updatedUser = await apiCompleteQuest(username, questId);
     await idbSaveUser(updatedUser);
   }
   displayUser(updatedUser);
   displayQuests();
-
   if (updatedUser.level > oldLevel) { // Vérifier si le niveau a augmenté
-    await sendLevelUpNotification(updatedUser.level);
+    console.log('sendLevelUpNotification', updatedUser.username, updatedUser.level);
+    await sendLevelUpNotification(updatedUser.username, updatedUser.level);
   }
 }
 

@@ -15,11 +15,11 @@ export async function requestNotificationPermission() {
 }
 
 // Send level up notification
-export async function sendLevelUpNotification(level) {
+export async function sendLevelUpNotification(username, level) {
   try {
     const registration = await navigator.serviceWorker.ready;
-    await registration.showNotification('Level Up! 🎮', {
-      body: `Congratulations! You reached level ${level}`,
+    await registration.showNotification('Level Up! 🌟', {
+      body: `Congratulations ${username} ! You reached level ${level}`,
       icon: '/icons/manifest-icon-192.maskable.png',
       badge: '/icons/manifest-icon-192.maskable.png',
       vibrate: [200, 100, 200],
