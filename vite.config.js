@@ -20,7 +20,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true // Enable service worker in development
+        enabled: true
       },
       manifest: {
         name: 'DevRPG - Le RPG des développeurs',
@@ -47,40 +47,7 @@ export default defineConfig({
             purpose: 'any'
           }
         ]
-      },
-      injectRegister: 'auto', // Automatically inject service worker registration into HTML
-      strategies: 'generateSW', // Use Workbox's generateSW strategy to create service worker
-      workbox: {
-        clientsClaim: true,
-        skipWaiting: true,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,gif,json}'],
-        runtimeCaching: [
-          {
-            urlPattern: /\.(?:js)$/,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'js-cache',
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif)$/,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'images-cache',
-            }
-          },
-          {
-            urlPattern: /\.(?:js|css)$/,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'static-resources'
-            }
-          }
-        ],
-      },
+      }
     })
   ]
 });

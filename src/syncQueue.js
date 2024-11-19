@@ -1,6 +1,7 @@
 // src/syncQueue.js
 import { openDB } from 'idb';
 import { apiCompleteQuest } from './api';
+import { displayQuests, getQuests } from './main';
 
 // Initialize IndexedDB for the sync queue
 async function initSyncDB() {
@@ -57,4 +58,6 @@ export async function processSyncQueue() {
       // Keep the action in the queue if it fails
     }
   }
+  const quests = await getQuests();
+  displayQuests(quests);
 } 

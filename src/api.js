@@ -5,7 +5,6 @@ export async function apiGetUser(username) {
     const response = await fetch(`${API_BASE_URL}/users/${username}`);
     return await response.json();
   } catch (error) {
-    console.error('Erreur lors de la récupération de l\'utilisateur:', error);
     throw error;
   }
 }
@@ -15,7 +14,6 @@ export async function apiGetQuests() {
     const response = await fetch(`${API_BASE_URL}/quests`);
     return await response.json();
   } catch (error) {
-    console.error('Erreur lors de la récupération des quêtes:', error);
     throw error;
   }
 }
@@ -28,7 +26,6 @@ export async function apiCompleteQuest(username, questId) {
     );
     return await response.json();
   } catch (error) {
-    console.error('Erreur lors de la complétion de la quête:', error);
     throw error;
   }
 } 

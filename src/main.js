@@ -1,6 +1,10 @@
 // src/main.js
+import { apiCompleteQuest, apiGetQuests, apiGetUser } from './api.js'
+import { idbCompleteQuest, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js'
 import { createInstallButton } from './InstallButton'
+import { requestNotificationPermission, sendLevelUpNotification } from './notifications.js'
 import { initPWA } from './pwaCustomInstall'
+import { addToSyncQueue, processSyncQueue } from './syncQueue'
 
 // Initialize PWA features
 initPWA()
@@ -11,11 +15,7 @@ if (installButton) {
   document.body.appendChild(installButton)
 }
 
-import { apiCompleteQuest, apiGetQuests, apiGetUser } from './api.js'
-import { idbCompleteQuest, idbGetQuests, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js'
-import { addToSyncQueue, processSyncQueue } from './syncQueue'
-
-async function getQuests() {
+export async function getQuests() {
   try {
     const quests = await apiGetQuests();
     await idbSaveQuests(quests);
@@ -37,7 +37,7 @@ async function getUser(username) {
   }
 }
 
-function displayQuests() {
+export function displayQuests() {
   getQuests().then((quests) => {
     const questsList = $('#quests-list');
     questsList.empty();
@@ -69,44 +69,37 @@ function displayUser(user) {
 
 async function completeQuest(questId) {
   const username = $('#username').val();
-
   if (!username) {
     alert('Please enter a character name');
     $('#username').focus();
     return;
   }
 
-  try {
-    if (!navigator.onLine) {
-      // If offline, add to sync queue and update locally
-      await addToSyncQueue({ type: 'completeQuest', username, questId });
-      const updatedUser = await idbCompleteQuest(username, questId);
-      await idbSaveUser(updatedUser);
-      displayUser(updatedUser);
-      displayQuests();
-    } else {
-      // If online, process normally
-      const user = await apiCompleteQuest(username, questId);
-      await idbSaveUser(user);
-      displayUser(user);
-      displayQuests();
-    }
-  } catch (error) {
-    // In case of error, update locally and queue for sync
-    await addToSyncQueue({
-      type: 'completeQuest',
-      username,
-      questId
-    });
-    const updatedUser = await idbCompleteQuest(username, questId);
+  const oldLevel = await idbGetUser(username).level; // Sauvegarder le niveau actuel
+  let updatedUser;
+
+  if (!navigator.onLine) {
+    // If offline, add to sync queue and update locally
+    await addToSyncQueue({ type: 'completeQuest', username, questId });
+    updatedUser = await idbCompleteQuest(username, questId);
     await idbSaveUser(updatedUser);
-    displayUser(updatedUser);
-    displayQuests();
+  } else {
+    // If online, process normally
+    updatedUser = await apiCompleteQuest(username, questId);
+    await idbSaveUser(updatedUser);
+  }
+  displayUser(updatedUser);
+  displayQuests();
+
+  if (updatedUser.level > oldLevel) { // Vérifier si le niveau a augmenté
+    await sendLevelUpNotification(updatedUser.level);
   }
 }
 
 // Add at the beginning of the file
 async function updateConnectionStatus() {
+  console.log('updateConnectionStatus', navigator.onLine);
+
   const online = navigator.onLine;
   $('.online').toggleClass('hidden', !online);
   $('.offline').toggleClass('hidden', online);
@@ -127,6 +120,7 @@ window.addEventListener('offline', updateConnectionStatus);
 
 // Initialization
 $(() => {
+  requestNotificationPermission();
   if (localStorage.getItem('username')) {
     $('#username').val(localStorage.getItem('username'));
   }
