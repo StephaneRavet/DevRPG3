@@ -1,3 +1,4 @@
+// idb.js
 import { openDB } from 'idb';
 
 const DB_NAME = 'devrpg-db';
