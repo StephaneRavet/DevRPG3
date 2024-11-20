@@ -74,12 +74,14 @@ export class FileManager {
     return canvas;
   }
 
-  createImageFromBlob(blob, type) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.src = URL.createObjectURL(new Blob([blob], { type }));
-    });
+  async createImageFromBlob(blob, type) {
+    const img = new Image();
+    const url = URL.createObjectURL(new Blob([blob], { type }));
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+    return img;
   }
 
   async downloadFile() {
@@ -87,56 +89,46 @@ export class FileManager {
       const quality = $('#qualitySlider').val() / 100;
       const $imagePreview = $('#imagePreview');
 
-      // Create canvas for final compression
+      const img = new Image();
+      await new Promise((resolve) => {
+        img.onload = resolve;
+        img.src = $imagePreview.attr('src');
+      });
+
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      const img = new Image();
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      ctx.drawImage(img, 0, 0);
 
-      img.onload = async () => {
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        ctx.drawImage(img, 0, 0);
+      const originalFile = await this.fileHandle?.getFile();
+      const fileType = originalFile?.type || 'image/jpeg';
+      const fileExt = fileType.split('/')[1];
 
-        // Get original file info
-        const originalFile = await this.fileHandle?.getFile();
-        const fileType = originalFile?.type || 'image/jpeg';
-        const fileExt = fileType.split('/')[1];
+      const originalName = originalFile?.name || `image.${fileExt}`;
+      const nameWithoutExt = originalName.replace(/\.[^/.]+$/, '');
+      const suggestedName = `${nameWithoutExt}_q${Math.round(quality * 100)}.${fileExt}`;
 
-        // Generate suggested filename with quality indicator
-        const originalName = originalFile?.name || `image.${fileExt}`;
-        const nameWithoutExt = originalName.replace(/\.[^/.]+$/, '');
-        const suggestedName = `${nameWithoutExt}_q${Math.round(quality * 100)}.${fileExt}`;
+      const blob = await new Promise(resolve => {
+        canvas.toBlob(resolve, fileType, quality);
+      });
 
-        // Convert to blob with selected quality
-        const blob = await new Promise(resolve => {
-          canvas.toBlob(resolve, fileType, quality);
-        });
-
-        // Configure save file picker options
-        const options = {
-          suggestedName,
-          types: [{ description: 'Images', accept: { [fileType]: [`.${fileExt}`] }, }],
-        };
-
-        try {
-          // Show save file picker
-          const handle = await window.showSaveFilePicker(options);
-          const writable = await handle.createWritable();
-          await writable.write(blob);
-          await writable.close();
-          console.info('File saved successfully');
-        } catch (error) {
-          if (error.name === 'AbortError') {
-            console.info('Save file operation was cancelled');
-            return;
-          } else {
-            console.error('File System API not supported');
-          }
-        }
+      const options = {
+        suggestedName,
+        types: [{ description: 'Images', accept: { [fileType]: [`.${fileExt}`] } }],
       };
 
-      img.src = $imagePreview.attr('src');
+      const handle = await window.showSaveFilePicker(options);
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+
+      console.info('File saved successfully');
     } catch (error) {
+      if (error.name === 'AbortError') {
+        console.info('Save file operation was cancelled');
+        return;
+      }
       console.error('Error while saving:', error);
     }
   }

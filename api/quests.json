@@ -11,15 +11,26 @@
   { "name": "Documenter une fonctionnalité", "xp": 30 },
   { "name": "Améliorer la vitesse de chargement", "xp": 75 },
   { "name": "Ajouter une fonctionnalité de recherche", "xp": 80 },
-  { "name": "Déployer sur un serveur distant", "xp": 100 },
-  { "name": "Créer un design responsive", "xp": 70 },
-  { "name": "Ajouter un système de notifications", "xp": 50 },
-  { "name": "Mettre en place un cache de données", "xp": 60 },
-  { "name": "Optimiser une fonction JavaScript", "xp": 45 },
-  { "name": "Intégrer une API tierce", "xp": 90 },
-  { "name": "Créer une page 404 personnalisée", "xp": 20 },
-  { "name": "Ajouter un thème sombre", "xp": 65 },
-  { "name": "Gérer les erreurs utilisateur", "xp": 30 },
-  { "name": "Améliorer la sécurité des formulaires", "xp": 80 },
-  { "name": "Ajouter une fonctionnalité de téléchargement", "xp": 50 }
+  {
+    "name": "Participer à un meetup tech",
+    "xp": 150,
+    "type": "geo",
+    "location": {
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "radius": 100,
+      "name": "La Cantine Numérique"
+    }
+  },
+  {
+    "name": "Travailler depuis un espace de coworking",
+    "xp": 100,
+    "type": "geo",
+    "location": {
+      "latitude": 48.8649,
+      "longitude": 2.38,
+      "radius": 50,
+      "name": "WeWork Lafayette"
+    }
+  }
 ]

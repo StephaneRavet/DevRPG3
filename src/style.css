@@ -3,7 +3,8 @@
 @tailwind components;
 @tailwind utilities;
 
-#quests-list li {
+#quests-list li,
+#nearby-quests-list li {
   @apply p-2 bg-gray-700 rounded hover:bg-gray-600 cursor-pointer select-none;
 }
 

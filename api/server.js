@@ -31,7 +31,12 @@ async function initDB() {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         description TEXT,
-        xp INTEGER
+        xp INTEGER,
+        type TEXT,
+        location_lat REAL,
+        location_lng REAL,
+        location_radius INTEGER,
+        location_name TEXT
       )
     `);
 
@@ -71,7 +76,22 @@ const getUserByUsername = async (req, res) => {
 const getAllQuests = async (_req, res) => {
   try {
     const quests = await db.all('SELECT * FROM quests');
-    res.json(quests);
+    const formattedQuests = quests.map(quest => ({
+      id: quest.id,
+      name: quest.name,
+      description: quest.description,
+      xp: quest.xp,
+      type: quest.type,
+      ...(quest.type === 'geo' && {
+        location: {
+          latitude: quest.location_lat,
+          longitude: quest.location_lng,
+          radius: quest.location_radius,
+          name: quest.location_name
+        }
+      })
+    }));
+    res.json(formattedQuests);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -87,33 +107,50 @@ const completeQuest = async (req, res) => {
   }
 
   try {
-    const quest = await db.get('SELECT * FROM quests WHERE id = ?', [questId]);
+    // Validate questId is a number
+    const questIdNum = parseInt(questId, 10);
+    if (isNaN(questIdNum)) {
+      return res.status(400).json({ error: 'invalid questId format' });
+    }
+
+    const quest = await db.get('SELECT * FROM quests WHERE id = ?', [questIdNum]);
     if (!quest) {
-      return res.status(400).json({ error: 'invalid questId' });
+      return res.status(404).json({ error: 'quest not found' });
     }
 
-    const user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
-    if (!user) {
-      await db.run(
-        'INSERT INTO users (username, level, xp) VALUES (?, ?, ?)',
-        [username, 1, quest.xp]
-      );
-    } else {
-      const newXp = quest.xp + user.xp;
-      const newLevel = Math.floor(Math.pow(newXp, 0.4) / 2) + 1;
-      await db.run(
-        'UPDATE users SET level = ?, xp = ? WHERE username = ?',
-        [newLevel, newXp, username]
-      );
-    }
+    let user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
 
-    const result = await db.run('DELETE FROM quests WHERE id = ?', [questId]);
-    if (result.changes) {
-      await feedQuests();
-    }
+    // Begin transaction
+    await db.run('BEGIN TRANSACTION');
 
-    const updatedUser = await db.get('SELECT * FROM users WHERE username = ?', [username]);
-    res.json(updatedUser);
+    try {
+      if (!user) {
+        await db.run(
+          'INSERT INTO users (username, level, xp) VALUES (?, ?, ?)',
+          [username, 1, quest.xp]
+        );
+      } else {
+        const newXp = quest.xp + user.xp;
+        const newLevel = Math.floor(Math.pow(newXp, 0.4) / 2) + 1;
+        await db.run(
+          'UPDATE users SET level = ?, xp = ? WHERE username = ?',
+          [newLevel, newXp, username]
+        );
+      }
+
+      const result = await db.run('DELETE FROM quests WHERE id = ?', [questIdNum]);
+      if (result.changes) {
+        await feedQuests();
+      }
+
+      await db.run('COMMIT');
+
+      const updatedUser = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+      res.json(updatedUser);
+    } catch (error) {
+      await db.run('ROLLBACK');
+      throw error;
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -127,10 +164,30 @@ app.post('/api/users/:username/quests/:questId', completeQuest);
 // Helper functions
 async function feedQuests() {
   const randomQuest = QUESTS[Math.floor(Math.random() * QUESTS.length)];
+  const params = [
+    randomQuest.name,
+    randomQuest.description || '',
+    randomQuest.xp,
+    randomQuest.type || 'regular',
+    randomQuest.location?.latitude || null,
+    randomQuest.location?.longitude || null,
+    randomQuest.location?.radius || null,
+    randomQuest.location?.name || null
+  ];
+
   await db.run(`
-    INSERT INTO quests (name, description, xp) 
-    VALUES (?, ?, ?)
-  `, [randomQuest.name, randomQuest.description, randomQuest.xp]);
+    INSERT INTO quests (
+      name, 
+      description, 
+      xp, 
+      type,
+      location_lat,
+      location_lng,
+      location_radius,
+      location_name
+    ) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `, params);
 }
 
 // Server initialization
