@@ -30,11 +30,10 @@
           <button id="openFileBtn" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">
             Ouvrir un fichier
           </button>
-          <button id="saveFileBtn" disabled class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded opacity-50">
-            Sauvegarder
-          </button>
         </div>
-        <div id="previewContainer" class="hidden mt-4">
+        <div id="previewContainer" class="hidden mt-4 relative">
+          <button id="closeImageBtn" class="absolute top-2 right-2 text-gray-400 hover:text-gray-200">❌</button>
+          <button id="downloadImageBtn" class="absolute top-2 right-10 text-gray-400 hover:text-gray-200">⬇️</button>
           <img id="imagePreview" class="max-w-full h-auto rounded-lg mb-4">
           <div class="flex gap-4 items-center mb-4">
             <label class="text-gray-300">Qualité:</label>
