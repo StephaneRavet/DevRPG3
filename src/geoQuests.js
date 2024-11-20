@@ -1,3 +1,4 @@
+// src/geoQuest.js
 import { GeoLocationManager } from './geoLocation';
 
 export class GeoQuestManager {
@@ -38,6 +39,21 @@ export class GeoQuestManager {
     );
   }
 
+  isQuestInRange(quest, radius) {
+    if (!quest.location || !this.geoManager?.currentPosition) {
+      return false;
+    }
+
+    const distance = GeoLocationManager.calculateDistance(
+      this.geoManager.currentPosition.latitude,
+      this.geoManager.currentPosition.longitude,
+      quest.location.latitude,
+      quest.location.longitude
+    );
+
+    return distance <= radius * 1000;
+  }
+
   checkNearbyQuests(position) {
     if (!this.questList || !position) return;
 
@@ -46,17 +62,10 @@ export class GeoQuestManager {
     this.questList.forEach(quest => {
       if (quest.type !== 'geo' || !quest.location) return;
 
-      const distance = GeoLocationManager.calculateDistance(
-        position.latitude,
-        position.longitude,
-        quest.location.latitude,
-        quest.location.longitude
-      );
-
-      const $element = $(`#nearby-quests-list .quest-item[data-quest-id="${quest.id}"]`);
-      if ($element.length) {
-        $element.toggleClass('nearby bg-green-700', distance <= radius);
-      }
+      const inRange = this.isQuestInRange(quest, radius);
+      console.log(quest.name, inRange);
+      const $element = $(`#nearby-quests-list li[data-quest-id="${quest.id}"]`);
+      $element.toggleClass('nearby', inRange);
     });
   }
 } 

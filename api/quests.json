@@ -12,18 +12,18 @@
   { "name": "Améliorer la vitesse de chargement", "xp": 75 },
   { "name": "Ajouter une fonctionnalité de recherche", "xp": 80 },
   {
-    "name": "Participer à un meetup tech",
+    "name": "Paris - Participer à un meetup tech",
     "xp": 150,
     "type": "geo",
     "location": {
-      "latitude": 48.8566,
-      "longitude": 2.3522,
+      "latitude": 48.8737,
+      "longitude": 2.3317,
       "radius": 100,
-      "name": "La Cantine Numérique"
+      "name": "Station F"
     }
   },
   {
-    "name": "Travailler depuis un espace de coworking",
+    "name": "Lyon - Travailler depuis un espace de coworking",
     "xp": 100,
     "type": "geo",
     "location": {

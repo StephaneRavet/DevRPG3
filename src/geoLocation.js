@@ -1,3 +1,4 @@
+// src/geoLocation.js
 export class GeoLocationManager {
   constructor() {
     this.watchId = null;
@@ -7,20 +8,10 @@ export class GeoLocationManager {
 
   async requestPermission() {
     try {
-      const result = await navigator.permissions.query({ name: 'geolocation' });
-
-      if (result.state === 'granted') {
-        return true;
-      }
-
-      if (result.state === 'prompt') {
-        await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject);
-        });
-        return true;
-      }
-
-      return false;
+      await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+      return true;
     } catch (error) {
       console.error('Error requesting geolocation permission:', error);
       return false;
@@ -30,7 +21,7 @@ export class GeoLocationManager {
   addLocationListener(callback) {
     this.locationListeners.add(callback);
     if (this.currentPosition) {
-      callback(this.currentPosition);
+      callback(this.currentPosition, null);
     }
   }
 

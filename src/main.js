@@ -66,11 +66,22 @@ export async function displayQuests() {
     geoQuestsList.empty();
 
     geoQuests.forEach(quest => {
-      $(`<li class="quest-item" data-quest-id="${quest.id}">
-          <h3>${quest.name} (xp: ${quest.xp})</h3>
-          <p class="text-sm text-gray-400">${quest.location?.name || ''}</p>
-        </li>`)
-        .appendTo(geoQuestsList);
+      let inRange = false;
+      if (geoQuestManager?.geoManager?.currentPosition) {
+        const radius = $('#detection-radius').val() * 1000;
+        inRange = geoQuestManager.isQuestInRange(quest, radius);
+      }
+
+      const questElement = $(`<li class="quest-item" data-quest-id="${quest.id}">
+        <h3>${quest.name} (xp: ${quest.xp})</h3>
+        <p class="text-sm text-gray-400">${quest.location?.name || ''}</p>
+      </li>`);
+
+      if (inRange) {
+        questElement.addClass('nearby');
+      }
+
+      questElement.appendTo(geoQuestsList);
     });
   }
 
@@ -185,22 +196,29 @@ $(async () => {
 
   $('#detection-radius').on('input', function () {
     const radius = $(this).val();
-    $('#radius-value').text(radius);
+    $('#radius-value').text(radius + ' km'); // Ajouter "km"
     // Vérifier si geoQuestManager existe avant de l'utiliser
     if (geoQuestManager?.geoManager?.currentPosition) {
       geoQuestManager.checkNearbyQuests(geoQuestManager.geoManager.currentPosition);
+      displayQuests(); // Rafraîchir l'affichage pour mettre à jour les couleurs
     }
   });
 });
 
-function updateGPSDisplay(position) {
+function updateGPSDisplay(position, error) {
+  if (error) {
+    $('#location-status').html(
+      `<span class="text-red-400">❌ ${error.message}</span>`
+    );
+    return;
+  }
+
   if (!position) return;
 
   $('#current-lat').text(position.latitude.toFixed(6));
   $('#current-lng').text(position.longitude.toFixed(6));
   $('#current-accuracy').text(Math.round(position.accuracy));
 
-  // Mettre à jour le statut
   $('#location-status').html(
     '<span class="text-green-400">📍 Position mise à jour</span>'
   );

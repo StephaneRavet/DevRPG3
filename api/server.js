@@ -1,4 +1,4 @@
-// Imports
+// api/server.js
 import cors from 'cors';
 import express from 'express';
 import { readFileSync } from 'fs';
@@ -107,50 +107,33 @@ const completeQuest = async (req, res) => {
   }
 
   try {
-    // Validate questId is a number
-    const questIdNum = parseInt(questId, 10);
-    if (isNaN(questIdNum)) {
-      return res.status(400).json({ error: 'invalid questId format' });
-    }
-
-    const quest = await db.get('SELECT * FROM quests WHERE id = ?', [questIdNum]);
+    const quest = await db.get('SELECT * FROM quests WHERE id = ?', [questId]);
     if (!quest) {
-      return res.status(404).json({ error: 'quest not found' });
+      return res.status(400).json({ error: 'invalid questId' });
     }
 
-    let user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
-
-    // Begin transaction
-    await db.run('BEGIN TRANSACTION');
-
-    try {
-      if (!user) {
-        await db.run(
-          'INSERT INTO users (username, level, xp) VALUES (?, ?, ?)',
-          [username, 1, quest.xp]
-        );
-      } else {
-        const newXp = quest.xp + user.xp;
-        const newLevel = Math.floor(Math.pow(newXp, 0.4) / 2) + 1;
-        await db.run(
-          'UPDATE users SET level = ?, xp = ? WHERE username = ?',
-          [newLevel, newXp, username]
-        );
-      }
-
-      const result = await db.run('DELETE FROM quests WHERE id = ?', [questIdNum]);
-      if (result.changes) {
-        await feedQuests();
-      }
-
-      await db.run('COMMIT');
-
-      const updatedUser = await db.get('SELECT * FROM users WHERE username = ?', [username]);
-      res.json(updatedUser);
-    } catch (error) {
-      await db.run('ROLLBACK');
-      throw error;
+    const user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+    if (!user) {
+      await db.run(
+        'INSERT INTO users (username, level, xp) VALUES (?, ?, ?)',
+        [username, 1, quest.xp]
+      );
+    } else {
+      const newXp = quest.xp + user.xp;
+      const newLevel = Math.floor(Math.pow(newXp, 0.4) / 2) + 1;
+      await db.run(
+        'UPDATE users SET level = ?, xp = ? WHERE username = ?',
+        [newLevel, newXp, username]
+      );
     }
+
+    const result = await db.run('DELETE FROM quests WHERE id = ?', [questId]);
+    if (result.changes) {
+      await feedQuests();
+    }
+
+    const updatedUser = await db.get('SELECT * FROM users WHERE username = ?', [username]);
+    res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

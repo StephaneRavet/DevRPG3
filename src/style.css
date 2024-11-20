@@ -8,6 +8,10 @@
   @apply p-2 bg-gray-700 rounded hover:bg-gray-600 cursor-pointer select-none;
 }
 
+#nearby-quests-list li.nearby {
+  @apply text-green-500;
+}
+
 .pwa-install-button {
   position: fixed;
   bottom: 20px;
