@@ -22,7 +22,7 @@ async function initDB() {
   });
 }
 
-// Fonction helper pour générer une quête aléatoire
+// Helper function to generate a random quest
 function generateRandomQuest() {
   const randomQuest = QUESTS[Math.floor(Math.random() * QUESTS.length)];
   return {

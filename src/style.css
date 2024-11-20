@@ -58,3 +58,19 @@
 .update-button:hover {
   background: #4338ca;
 }
+
+#file-manager input[type="range"] {
+  @apply appearance-none bg-gray-700 h-2 rounded-lg;
+}
+
+#file-manager input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-4 h-4 bg-blue-500 rounded-full cursor-pointer;
+}
+
+#imagePreview {
+  @apply max-h-96 object-contain mx-auto;
+}
+
+button:disabled {
+  @apply cursor-not-allowed;
+}

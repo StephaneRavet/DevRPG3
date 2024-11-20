@@ -1,5 +1,6 @@
 // src/main.js
 import { apiCompleteQuest, apiGetQuests, apiGetUser } from './api.js'
+import { FileManager } from './fileManager.js'
 import { idbCompleteQuest, idbGetQuests, idbGetUser, idbSaveQuests, idbSaveUser } from './idb.js'
 import { createInstallButton } from './InstallButton'
 import { requestNotificationPermission, sendLevelUpNotification } from './notifications.js'
@@ -75,7 +76,7 @@ async function completeQuest(questId) {
     return;
   }
 
-  const oldLevel = (await idbGetUser(username)).level; // Sauvegarder le niveau actuel
+  const oldLevel = (await idbGetUser(username)).level; // Save current level
   let updatedUser;
 
   try {
@@ -90,15 +91,12 @@ async function completeQuest(questId) {
   displayUser(updatedUser);
   displayQuests();
   if (updatedUser.level > oldLevel) { // Vérifier si le niveau a augmenté
-    console.log('sendLevelUpNotification', updatedUser.username, updatedUser.level);
     await sendLevelUpNotification(updatedUser.username, updatedUser.level);
   }
 }
 
 // Add at the beginning of the file
 async function updateConnectionStatus() {
-  console.log('updateConnectionStatus', navigator.onLine);
-
   const online = navigator.onLine;
   $('.online').toggleClass('hidden', !online);
   $('.offline').toggleClass('hidden', online);
@@ -135,4 +133,7 @@ $(() => {
     const username = $('#username').val();
     localStorage.setItem('username', username);
   });
+
+  // Initialize file manager
+  new FileManager();
 });

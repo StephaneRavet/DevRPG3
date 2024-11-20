@@ -41,7 +41,7 @@ async function initDB() {
       await feedQuests();
     }
   } catch (error) {
-    console.error('Erreur d\'initialisation de la base de données:', error);
+    console.error('Database initialization error:', error);
     process.exit(1);
   }
 }
@@ -82,14 +82,14 @@ const completeQuest = async (req, res) => {
 
   if (!username || !questId) {
     return res.status(400).json({
-      error: !username ? 'username manquant' : 'questId manquant'
+      error: !username ? 'missing username' : 'missing questId'
     });
   }
 
   try {
     const quest = await db.get('SELECT * FROM quests WHERE id = ?', [questId]);
     if (!quest) {
-      return res.status(400).json({ error: 'questId invalide' });
+      return res.status(400).json({ error: 'invalid questId' });
     }
 
     const user = await db.get('SELECT * FROM users WHERE username = ?', [username]);

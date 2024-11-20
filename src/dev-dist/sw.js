@@ -67,7 +67,7 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-ed3775ef'], (function (workbox) { 'use strict';
+define(['./workbox-54d0af47'], (function (workbox) { 'use strict';
 
   self.skipWaiting();
   workbox.clientsClaim();
@@ -82,26 +82,12 @@ define(['./workbox-ed3775ef'], (function (workbox) { 'use strict';
     "revision": "3ca0b8505b4bec776b69afdba2768812"
   }, {
     "url": "index.html",
-    "revision": "0.tslfk6pogto"
+    "revision": "0.e1qdebf10l"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
     allowlist: [/^\/$/]
   }));
-  workbox.registerRoute(/\.(?:js)$/, new workbox.NetworkFirst({
-    "cacheName": "js-cache",
-    plugins: [new workbox.CacheableResponsePlugin({
-      statuses: [0, 200]
-    })]
-  }), 'GET');
-  workbox.registerRoute(/\.(?:png|jpg|jpeg|svg|gif)$/, new workbox.NetworkFirst({
-    "cacheName": "images-cache",
-    plugins: []
-  }), 'GET');
-  workbox.registerRoute(/\.(?:js|css)$/, new workbox.NetworkFirst({
-    "cacheName": "static-resources",
-    plugins: []
-  }), 'GET');
 
 }));
 //# sourceMappingURL=sw.js.map

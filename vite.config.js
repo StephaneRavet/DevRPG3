@@ -5,10 +5,6 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   root: 'src',
   server: {
-    watch: {
-      usePolling: true,
-    },
-    hmr: true,
     open: true,
   },
   build: {

@@ -22,6 +22,29 @@
   </header>
 
   <main class="container mx-auto p-6 max-w-4xl">
+
+    <section id="file-manager" class="mb-8">
+      <h2 class="text-xl font-semibold mb-1 text-blue-300">Gestionnaire de fichiers</h2>
+      <div class="bg-gray-800 p-6 rounded-lg shadow-xl">
+        <div class="flex gap-4">
+          <button id="openFileBtn" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded">
+            Ouvrir un fichier
+          </button>
+          <button id="saveFileBtn" disabled class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded opacity-50">
+            Sauvegarder
+          </button>
+        </div>
+        <div id="previewContainer" class="hidden mt-4">
+          <img id="imagePreview" class="max-w-full h-auto rounded-lg mb-4">
+          <div class="flex gap-4 items-center mb-4">
+            <label class="text-gray-300">Qualité:</label>
+            <input type="range" id="qualitySlider" min="0" max="100" value="80" class="w-48">
+            <span id="qualityValue" class="text-gray-300">80%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="dashboard" class="mb-8">
       <h2 class="text-xl font-semibold mb-1 text-blue-300">Tableau de bord</h2>
       <div class="bg-gray-800 p-6 rounded-lg shadow-xl hover:bg-gray-750 transition-colors">
@@ -41,6 +64,7 @@
       <ul class="bg-gray-800 p-6 rounded-lg shadow-xl space-y-3" id="quests-list">
       </ul>
     </section>
+
   </main>
   <script src="./main.js" type="module"></script>
 </body>
