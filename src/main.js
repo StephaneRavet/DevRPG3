@@ -53,7 +53,7 @@ export async function displayQuests() {
 
   regularQuests.forEach(quest => {
     const questElement = $(`
-      <li class="quest-item" data-quest-id="${quest.id}">
+      <li class="quest-item fade-in" data-quest-id="${quest.id}">
         ${quest.name} (xp: ${quest.xp})
       </li>
     `);
@@ -88,6 +88,8 @@ export async function displayQuests() {
   // Event handler for all quests
   $('.quest-item').on('click', async function () {
     const questId = $(this).data('quest-id');
+    $(this).addClass('fade-out');
+    await new Promise(resolve => setTimeout(resolve, 500)); // Attendre la fin de l'animation
     await completeQuest(questId);
   });
 }
